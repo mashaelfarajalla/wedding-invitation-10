@@ -31,48 +31,24 @@ button,input,textarea{font:inherit;color:inherit}
 /* ============ INTRO: envelope ============ */
 #intro{
   position:fixed;inset:0;z-index:50;cursor:pointer;overflow:hidden;
-  background:var(--paper) url(assets/images/envelope-texture.jpg) center/cover;
-  perspective:1400px;
+  background:#fff;
+  display:flex;flex-direction:column;align-items:center;justify-content:center;gap:28px;
   transition:opacity 1s ease .9s,visibility 1s ease .9s;
 }
-#intro::after{content:"";position:absolute;inset:0;background:rgba(255,255,255,.15);pointer-events:none}
-/* the flap: a V hanging from the top edge */
-.flap{
-  position:absolute;left:0;right:0;top:0;height:min(32vh,300px);z-index:2;
-  transform-origin:top center;transition:transform 1.1s cubic-bezier(.6,0,.3,1);
+/* the envelope photo, cropped to the envelope itself (white space above is trimmed) */
+.envelope{
+  width:min(88vw,440px);aspect-ratio:378/280;overflow:hidden;
+  animation:pulse 2.6s ease-in-out infinite;transition:opacity .7s ease,transform .9s cubic-bezier(.6,0,.3,1);
 }
-.flap::before,.flap::after{
-  content:"";position:absolute;inset:0;clip-path:polygon(0 0,100% 0,100% 62%,50% 100%,0 62%);
-}
-.flap::before{background:url(assets/images/envelope-texture.jpg) center top/100vw auto;filter:brightness(1.02)}
-.flap::after{
-  background:linear-gradient(180deg,rgba(255,255,255,0) 50%,rgba(170,155,125,.16));
-  filter:drop-shadow(0 2px 2px rgba(0,0,0,.2));
-}
-.flap-edge{
-  position:absolute;left:0;right:0;top:0;height:min(32vh,300px);z-index:1;pointer-events:none;
-  filter:drop-shadow(0 3px 5px rgba(90,75,50,.22));
-}
-.flap-edge::before{
-  content:"";position:absolute;inset:0;background:#efeae0;
-  clip-path:polygon(0 0,100% 0,100% 62%,50% 100%,0 62%);
-}
-.seal{
-  position:absolute;left:50%;top:min(32vh,300px);z-index:3;width:min(42vw,170px);
-  transform:translate(-50%,-50%);filter:drop-shadow(0 6px 10px rgba(80,55,20,.35));
-  animation:pulse 2.6s ease-in-out infinite;transition:opacity .5s ease,transform .7s ease;
-}
-@keyframes pulse{0%,100%{transform:translate(-50%,-50%) scale(1)}50%{transform:translate(-50%,-50%) scale(1.04)}}
+.envelope img{width:100%;height:100%;object-fit:cover;object-position:50% 90%;mix-blend-mode:multiply}
+@keyframes pulse{0%,100%{transform:scale(1)}50%{transform:scale(1.025)}}
 .tap{
-  position:absolute;left:50%;top:calc(min(32vh,300px) + min(26vw,110px));z-index:3;transform:translateX(-50%);
-  font-size:15px;font-weight:500;color:#7c705c;white-space:nowrap;
+  font-size:15px;font-weight:500;color:#6D7A69;white-space:nowrap;
   animation:blink 2.2s ease-in-out infinite;transition:opacity .4s ease;
 }
 @keyframes blink{0%,100%{opacity:.45}50%{opacity:1}}
-#intro.open .flap{transform:rotateX(180deg)}
-#intro.open .flap-edge{opacity:0;transition:opacity .4s}
-#intro.open .seal{opacity:0;transform:translate(-50%,-50%) scale(.85);animation:none}
-#intro.open .tap{opacity:0}
+#intro.open .envelope{opacity:0;transform:translateY(-30px) scale(1.08);animation:none}
+#intro.open .tap{opacity:0;animation:none}
 #intro.gone{opacity:0;visibility:hidden}
 
 /* ============ HERO ============ */
@@ -139,22 +115,24 @@ section.blk{position:relative;padding:64px 24px;text-align:center}
 .si .body{font-size:14px;line-height:1.7}
 
 /* pictures */
-.carousel{position:relative;margin-top:32px}
+/* peek carousel: active card on the left, the next one peeking in from the right */
+.carousel{margin:32px -24px 0}
 .slides{
-  display:flex;overflow-x:auto;scroll-snap-type:x mandatory;border-radius:8px;scrollbar-width:none;
+  position:relative;display:flex;align-items:center;gap:12px;padding:14px 0 22px 24px;
+  overflow-x:auto;scroll-snap-type:x mandatory;scroll-padding-left:24px;scrollbar-width:none;
 }
 .slides::-webkit-scrollbar{display:none}
-.slides img{flex:0 0 100%;width:100%;aspect-ratio:4/5;object-fit:cover;scroll-snap-align:center}
-.arrow{
-  position:absolute;top:50%;width:40px;height:40px;margin-top:-20px;border:0;border-radius:50%;
-  background:rgba(255,255,255,.75);display:grid;place-items:center;cursor:pointer;color:var(--text);
-  box-shadow:0 2px 8px rgba(0,0,0,.12);
+/* trailing space so the last card can also snap to the left edge */
+.slides::after{content:"";flex:0 0 calc(22% + 12px)}
+.slides img{
+  flex:0 0 78%;width:78%;aspect-ratio:3/4;object-fit:cover;scroll-snap-align:start;
+  border-radius:10px;box-shadow:0 10px 24px rgba(74,90,70,.18);
+  transform:scale(.92);transform-origin:left center;opacity:.85;transition:transform .45s ease,opacity .45s ease;
 }
-.arrow svg{width:18px;height:18px}
-.arrow.prev{left:8px}.arrow.next{right:8px}
-.dots{display:flex;justify-content:center;gap:6px;margin-top:12px}
-.dots button{width:8px;height:8px;border:0;border-radius:99px;background:var(--muted);cursor:pointer;padding:0;transition:width .3s,background .3s}
-.dots button.on{width:24px;background:var(--accent)}
+.slides img.on{transform:none;opacity:1}
+.dots{display:flex;justify-content:center;gap:7px;margin-top:4px}
+.dots button{width:7px;height:7px;border:0;border-radius:50%;background:var(--muted);cursor:pointer;padding:0;transition:background .3s,transform .3s}
+.dots button.on{background:var(--accent);transform:scale(1.15)}
 
 /* program */
 .lights{width:calc(100% + 48px);max-width:none;margin:-30px -24px 40px;aspect-ratio:736/140;object-fit:cover;object-position:center 34%}
@@ -323,9 +301,7 @@ body.ready .dock{transform:translate(-50%,0)}
 
 <!-- ============ INTRO ============ -->
 <div id="intro" role="button" aria-label="اضغط لفتح الدعوة" tabindex="0">
-  <div class="flap-edge"></div>
-  <div class="flap"></div>
-  <img class="seal" src="assets/images/mersal-seal-champagne.png" alt="">
+  <div class="envelope"><img src="assets/images/envelope-mersal.jpg" alt=""></div>
   <div class="tap">اضغط لفتح الدعوة</div>
 </div>
 
@@ -422,12 +398,13 @@ body.ready .dock{transform:translate(-50%,0)}
     <p class="sub reveal">لحظات من رحلتنا معًا.</p>
     <div class="carousel reveal" dir="ltr">
       <div class="slides" id="slides">
-        <img src="assets/images/تنزيل (13).jpg" alt="العروسان أمام بيت حجري">
-        <img src="assets/images/maxresdefault.jpg" alt="العروسان يمشيان على العشب" loading="lazy">
+        <img src="assets/images/maxresdefault.jpg" alt="العروسان يمشيان على العشب">
         <img src="assets/images/maxresdefault (1).jpg" alt="العروسان في نزهة وقت الغروب" loading="lazy" style="object-position:68% center">
+        <img src="assets/images/photo-1.jpg" alt="العروسان يرقصان أمام القصر" loading="lazy">
+        <img src="assets/images/photo-2.jpg" alt="صورة للعروسين" loading="lazy">
+        <img src="assets/images/photo-3.jpg" alt="صورة للعروسين" loading="lazy">
+        <img src="assets/images/MKY08432.jpg" alt="العروسان بين الأهل والأصدقاء" loading="lazy" style="object-position:58% center">
       </div>
-      <button class="arrow prev" type="button" aria-label="الصورة السابقة"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 6l-6 6 6 6"/></svg></button>
-      <button class="arrow next" type="button" aria-label="الصورة التالية"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 6l6 6-6 6"/></svg></button>
     </div>
     <div class="dots" id="dots" dir="ltr"></div>
   </section>
@@ -623,12 +600,20 @@ imgs.forEach((_, i) => {
   $('dots').append(b);
 });
 const dots = [...$('dots').children];
-const current = () => Math.round(slides.scrollLeft / slides.clientWidth);
-const go = i => slides.scrollTo({ left: ((i + imgs.length) % imgs.length) * slides.clientWidth, behavior: 'smooth' });
-const markDot = () => dots.forEach((d, i) => d.classList.toggle('on', i === current()));
+// card i is snapped when the strip has scrolled by its offset from the first card
+const pos = i => imgs[i].offsetLeft - imgs[0].offsetLeft;
+const current = () => {
+  let best = 0;
+  imgs.forEach((_, i) => { if (Math.abs(pos(i) - slides.scrollLeft) < Math.abs(pos(best) - slides.scrollLeft)) best = i; });
+  return best;
+};
+const go = i => slides.scrollTo({ left: pos(i), behavior: 'smooth' });
+const markDot = () => {
+  const c = current();
+  dots.forEach((d, i) => d.classList.toggle('on', i === c));
+  imgs.forEach((im, i) => im.classList.toggle('on', i === c));
+};
 slides.addEventListener('scroll', markDot, { passive: true });
-document.querySelector('.arrow.prev').addEventListener('click', () => go(current() - 1));
-document.querySelector('.arrow.next').addEventListener('click', () => go(current() + 1));
 markDot();
 
 // Copy IBAN
