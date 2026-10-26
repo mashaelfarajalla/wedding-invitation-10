@@ -8,10 +8,13 @@
 <link rel="apple-touch-icon" href="mersal-favicon.png?v=3">
 <meta name="description" content="عمر وديمة في فيلا روزا">
 <meta property="og:title" content="عمر وديمة — دعوة زفاف">
-<link rel="preload" href="assets/hero.mp4" as="video">
+<link rel="preload" href="assets/images/envelope-mersal.jpg" as="image" fetchpriority="high">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Aref+Ruqaa:wght@400;700&family=Amiri:ital,wght@0,400;0,700;1,400&family=Tajawal:wght@400;500;700&display=swap" rel="stylesheet">
+<!-- fonts load without blocking the first paint -->
+<link rel="preload" href="https://fonts.googleapis.com/css2?family=Aref+Ruqaa:wght@400;700&family=Amiri:wght@400;700&family=Tajawal:wght@400;500;700&display=swap" as="style">
+<link href="https://fonts.googleapis.com/css2?family=Aref+Ruqaa:wght@400;700&family=Amiri:wght@400;700&family=Tajawal:wght@400;500;700&display=swap" rel="stylesheet" media="print" onload="this.media='all'">
+<noscript><link href="https://fonts.googleapis.com/css2?family=Aref+Ruqaa:wght@400;700&family=Amiri:wght@400;700&family=Tajawal:wght@400;500;700&display=swap" rel="stylesheet"></noscript>
 <style>
 :root{
   --bg:#FCFDF7; --bg-2:#F4F6EF; --card:#F4F5EF;
@@ -25,7 +28,7 @@ body{
   overflow-x:hidden;-webkit-font-smoothing:antialiased;line-height:1.8;
 }
 body.locked{overflow:hidden;height:100vh}
-img{display:block;max-width:100%}
+img{display:block;max-width:100%;height:auto}
 button,input,textarea{font:inherit;color:inherit}
 
 /* ============ INTRO: envelope ============ */
@@ -301,7 +304,7 @@ body.ready .dock{transform:translate(-50%,0)}
 
 <!-- ============ INTRO ============ -->
 <div id="intro" role="button" aria-label="اضغط لفتح الدعوة" tabindex="0">
-  <div class="envelope"><img src="assets/images/envelope-mersal.jpg" alt=""></div>
+  <div class="envelope"><img src="assets/images/envelope-mersal.jpg" alt="" width="378" height="469" fetchpriority="high"></div>
   <div class="tap">اضغط لفتح الدعوة</div>
 </div>
 
@@ -326,11 +329,11 @@ body.ready .dock{transform:translate(-50%,0)}
     الحضور
   </a>
 </nav>
-<audio id="audio" src="assets/music.mp3" loop preload="auto"></audio>
+<audio id="audio" src="assets/music.mp3" loop preload="none"></audio>
 
 <!-- ============ HERO ============ -->
 <header class="hero">
-  <video id="hero-video" src="assets/hero.mp4" muted loop playsinline preload="auto"></video>
+  <video id="hero-video" src="assets/hero.mp4" poster="assets/images/hero-poster.jpg" muted loop playsinline preload="none"></video>
   <div class="shade"></div>
   <svg class="torn top" viewBox="0 0 400 28" preserveAspectRatio="none" aria-hidden="true"><path fill="#FAF8F5" opacity=".9" d="M0 28V15Q9 12 17 14T34 13Q41 16 50 12T66 14Q75 11 83 15T101 12Q108 9 118 13T137 14Q146 16 155 12T173 13Q181 10 190 14T209 15Q217 11 226 13T244 12Q253 16 262 14T281 11Q289 13 297 15T316 12Q324 10 333 14T351 13Q359 16 368 12T386 14Q393 12 400 13V28Z"/></svg>
   <div class="txt">
@@ -348,7 +351,7 @@ body.ready .dock{transform:translate(-50%,0)}
 <main>
   <!-- ============ COUNTDOWN ============ -->
   <section class="blk countdown" id="countdown">
-    <img class="trees" src="assets/images/cypresses.png" alt="">
+    <img class="trees" src="assets/images/cypresses.webp" alt="" width="128" height="265" loading="lazy" decoding="async">
     <h2 class="h reveal">العد التنازلي</h2>
     <div class="count reveal">
       <div><b id="cd-d">0</b><small>يوم</small></div>
@@ -362,7 +365,7 @@ body.ready .dock{transform:translate(-50%,0)}
   <!-- ============ OUR STORY ============ -->
   <section class="blk">
     <h2 class="h reveal">قصتنا</h2>
-    <img class="couple reveal" src="assets/images/couple.png" alt="العروسان يمشيان يدًا بيد">
+    <img class="couple reveal" src="assets/images/couple.webp" alt="العروسان يمشيان يدًا بيد" width="320" height="296" loading="lazy" decoding="async">
     <div class="story-list">
       <svg class="story-path reveal" aria-hidden="true"><path/></svg>
       <div class="si reveal">
@@ -398,12 +401,12 @@ body.ready .dock{transform:translate(-50%,0)}
     <p class="sub reveal">لحظات من رحلتنا معًا.</p>
     <div class="carousel reveal" dir="ltr">
       <div class="slides" id="slides">
-        <img src="assets/images/maxresdefault.jpg" alt="العروسان يمشيان على العشب">
-        <img src="assets/images/maxresdefault (1).jpg" alt="العروسان في نزهة وقت الغروب" loading="lazy" style="object-position:68% center">
-        <img src="assets/images/photo-1.jpg" alt="العروسان يرقصان أمام القصر" loading="lazy">
-        <img src="assets/images/photo-2.jpg" alt="صورة للعروسين" loading="lazy">
-        <img src="assets/images/photo-3.jpg" alt="صورة للعروسين" loading="lazy">
-        <img src="assets/images/MKY08432.jpg" alt="العروسان بين الأهل والأصدقاء" loading="lazy" style="object-position:58% center">
+        <img src="assets/images/photo-a.webp" alt="العروسان يمشيان على العشب" width="1536" height="1024" loading="lazy" decoding="async">
+        <img src="assets/images/photo-b.webp" alt="العروسان في نزهة وقت الغروب" width="1536" height="1024" loading="lazy" decoding="async" style="object-position:68% center">
+        <img src="assets/images/photo-1.webp" alt="العروسان يرقصان أمام القصر" width="938" height="1173" loading="lazy" decoding="async">
+        <img src="assets/images/photo-2.webp" alt="صورة للعروسين" width="736" height="920" loading="lazy" decoding="async">
+        <img src="assets/images/photo-3.webp" alt="صورة للعروسين" width="880" height="1320" loading="lazy" decoding="async">
+        <img src="assets/images/photo-c.webp" alt="العروسان بين الأهل والأصدقاء" width="1760" height="1173" loading="lazy" decoding="async" style="object-position:58% center">
       </div>
     </div>
     <div class="dots" id="dots" dir="ltr"></div>
@@ -411,7 +414,7 @@ body.ready .dock{transform:translate(-50%,0)}
 
   <!-- ============ PROGRAM ============ -->
   <section class="blk">
-    <img class="lights reveal" src="assets/images/lights-string.png" alt="">
+    <img class="lights reveal" src="assets/images/lights-string.webp" alt="" width="736" height="368" loading="lazy" decoding="async">
     <h2 class="h reveal">برنامج الحفل</h2>
     <div class="prog reveal">
       <div class="pi"><time>4:00 م</time><i class="dot"></i><span>استقبال الضيوف والمشروبات</span></div>
@@ -427,7 +430,7 @@ body.ready .dock{transform:translate(-50%,0)}
   <section class="blk">
     <h2 class="h reveal">قواعد اللباس</h2>
     <p class="code reveal">رسمي فاخر</p>
-    <img class="dress reveal" src="assets/images/dresscode.png" alt="ضيوف بملابس رسمية">
+    <img class="dress reveal" src="assets/images/dresscode.webp" alt="ضيوف بملابس رسمية" width="400" height="315" loading="lazy" decoding="async">
     <p class="body reveal">يسعدنا أن يحضر ضيوفنا بأبهى إطلالة. ننصح السادة بارتداء البدلات الرسمية أو الداكنة، والسيدات بالفساتين الطويلة أو فساتين السهرة الأنيقة.</p>
     <div class="palette reveal">
       <i style="background:#1a1a2e"></i><i style="background:#8b0000"></i><i style="background:#c9a96e"></i><i style="background:#f5f0e8"></i>
@@ -438,7 +441,7 @@ body.ready .dock{transform:translate(-50%,0)}
 
   <!-- ============ VENUE ============ -->
   <section class="blk venue" id="venue">
-    <img class="car reveal" src="assets/images/car.png" alt="">
+    <img class="car reveal" src="assets/images/car.webp" alt="" width="300" height="246" loading="lazy" decoding="async">
     <h2 class="h reveal">مكان الحفل</h2>
     <p class="vname reveal" data-f="venue">فيلا روزا</p>
     <p class="addr reveal" data-f="address">توسكانا، إيطاليا</p>
@@ -614,7 +617,7 @@ const markDot = () => {
   imgs.forEach((im, i) => im.classList.toggle('on', i === c));
 };
 slides.addEventListener('scroll', markDot, { passive: true });
-markDot();
+requestAnimationFrame(markDot);
 
 // Copy IBAN
 $('iban').addEventListener('click', () => {
@@ -730,7 +733,7 @@ const markProg = () => {
 };
 addEventListener('scroll', () => { if (!progTick) { progTick = true; requestAnimationFrame(markProg); } }, { passive: true });
 addEventListener('resize', markProg);
-markProg();
+requestAnimationFrame(markProg);
 
 // Story: one continuous curve from icon to icon, with an arrowhead into each
 const storyList = document.querySelector('.story-list');
@@ -753,8 +756,8 @@ const drawStory = () => {
   storyList.querySelector('.story-path path').setAttribute('d', d);
 };
 addEventListener('resize', drawStory);
-document.fonts.ready.then(drawStory);
-drawStory();
+document.fonts.ready.then(() => requestAnimationFrame(drawStory));
+requestAnimationFrame(drawStory);
 </script>
 </body>
 </html>
