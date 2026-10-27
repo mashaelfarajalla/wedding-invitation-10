@@ -56,6 +56,8 @@ button,input,textarea{font:inherit;color:inherit}
 
 /* ============ HERO ============ */
 .hero{position:relative;height:100svh;min-height:520px;overflow:hidden;background:#d9d4c4}
+/* hidden behind the envelope until it opens, so it never competes with it for the first paint */
+body.locked .hero{visibility:hidden}
 .hero video{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
 .hero .shade{position:absolute;inset:0;background:rgba(0,0,0,.35)}
 .hero .txt{
@@ -333,7 +335,7 @@ body.ready .dock{transform:translate(-50%,0)}
 
 <!-- ============ HERO ============ -->
 <header class="hero">
-  <video id="hero-video" src="assets/hero.mp4" poster="assets/images/hero-poster.jpg" muted loop playsinline preload="none"></video>
+  <video id="hero-video" src="assets/hero.mp4" data-poster="assets/images/hero-poster.jpg" muted loop playsinline preload="none"></video>
   <div class="shade"></div>
   <svg class="torn top" viewBox="0 0 400 28" preserveAspectRatio="none" aria-hidden="true"><path fill="#FAF8F5" opacity=".9" d="M0 28V15Q9 12 17 14T34 13Q41 16 50 12T66 14Q75 11 83 15T101 12Q108 9 118 13T137 14Q146 16 155 12T173 13Q181 10 190 14T209 15Q217 11 226 13T244 12Q253 16 262 14T281 11Q289 13 297 15T316 12Q324 10 333 14T351 13Q359 16 368 12T386 14Q393 12 400 13V28Z"/></svg>
   <div class="txt">
@@ -563,8 +565,11 @@ function startPage() {
   document.body.classList.remove('locked');
   document.body.classList.add('ready');
   window.scrollTo(0, 0);
+  video.poster = video.dataset.poster;
   video.play().catch(() => {});
   audio.play().then(() => musicBtn.classList.add('playing')).catch(() => {});
+  // measure the page only once it is shown, so the first load does no layout work
+  requestAnimationFrame(() => { markProg(); drawStory(); });
 }
 function openInvite() {
   if (intro.classList.contains('open')) return;
@@ -604,7 +609,10 @@ imgs.forEach((_, i) => {
 });
 const dots = [...$('dots').children];
 // card i is snapped when the strip has scrolled by its offset from the first card
-const pos = i => imgs[i].offsetLeft - imgs[0].offsetLeft;
+// offsets are cached so scrolling never forces a layout; reset on resize
+let offsets = null;
+addEventListener('resize', () => { offsets = null; });
+const pos = i => (offsets ??= imgs.map(im => im.offsetLeft - imgs[0].offsetLeft))[i];
 const current = () => {
   let best = 0;
   imgs.forEach((_, i) => { if (Math.abs(pos(i) - slides.scrollLeft) < Math.abs(pos(best) - slides.scrollLeft)) best = i; });
@@ -617,7 +625,9 @@ const markDot = () => {
   imgs.forEach((im, i) => im.classList.toggle('on', i === c));
 };
 slides.addEventListener('scroll', markDot, { passive: true });
-requestAnimationFrame(markDot);
+// the strip starts at the first card, so no measuring is needed yet
+dots[0].classList.add('on');
+imgs[0].classList.add('on');
 
 // Copy IBAN
 $('iban').addEventListener('click', () => {
@@ -724,16 +734,15 @@ const markProg = () => {
   const line = innerHeight * 0.6;
   let idx = 0;
   progItems.forEach((el, i) => { if (el.getBoundingClientRect().top < line) idx = i; });
-  progItems.forEach((el, i) => el.classList.toggle('on', i === idx));
-  // Fill the line from the top down to the active dot
+  // Fill the line from the top down to the active dot (all reads before any writes)
   const prog = progItems[0].parentElement;
   const dot = progItems[idx].querySelector('.dot').getBoundingClientRect();
   const fill = dot.top + dot.height / 2 - prog.getBoundingClientRect().top - 6;
+  progItems.forEach((el, i) => el.classList.toggle('on', i === idx));
   prog.style.setProperty('--fill', Math.max(0, fill) + 'px');
 };
 addEventListener('scroll', () => { if (!progTick) { progTick = true; requestAnimationFrame(markProg); } }, { passive: true });
 addEventListener('resize', markProg);
-requestAnimationFrame(markProg);
 
 // Story: one continuous curve from icon to icon, with an arrowhead into each
 const storyList = document.querySelector('.story-list');
@@ -756,8 +765,8 @@ const drawStory = () => {
   storyList.querySelector('.story-path path').setAttribute('d', d);
 };
 addEventListener('resize', drawStory);
-document.fonts.ready.then(() => requestAnimationFrame(drawStory));
-requestAnimationFrame(drawStory);
+// fonts change the text height, so redraw once they are in (only after the invite is open)
+document.fonts.ready.then(() => { if (document.body.classList.contains('ready')) requestAnimationFrame(drawStory); });
 </script>
 </body>
 </html>
